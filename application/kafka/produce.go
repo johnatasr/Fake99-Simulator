@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -16,12 +17,13 @@ func Produce(msg *ckafka.Message) {
 	route := route.NewRoute()
 	json.Unmarshal(msg.Value, &route)
 	route.LoadPositions()
-	positions, err := route.ExportJson()
+	positions, err := route.ExportJsonPositions()
 	if err != nil {
 		log.Println(err.Error())
 	}
 	for _, p := range positions {
 		kafka.Publish(p, os.Getenv("KafkaProduceTopic"), producer)
+		fmt.Println("Publish created:  ", p)
 		time.Sleep(time.Millisecond * 500)
 	}
 }

@@ -30,6 +30,8 @@ func (k *KafkaConsumer) Consume() {
 		log.Fatalf("Error consuming Kafka message: " + err.Error())
 	}
 
+	topics := []string{os.Getenv("KafkaReadTopic")}
+	c.SubscribeTopics(topics, nil)
 	fmt.Println("Kafka consumer has been started")
 
 	for {
